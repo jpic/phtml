@@ -83,10 +83,21 @@ def test_new_attrs():
     assert Foo()['class'] == 'foo'
 
 
-def test_new_phtml_tag_override():
+def test_new_attrs_update():
+    class Foo(Div):
+        attrs = {'class': 'foo'}
+    assert Foo({'bar': 'test'})['bar'] == 'test'
+
+
+def test_new_attrs_override():
+    class Foo(Div):
+        attrs = {'class': 'foo'}
+    assert Foo({'class': 'bar'})['class'] == 'bar'
+
+
+def test_new_phtml_tag_parse():
     class Foo(Div):
         phtml = '<form></form>'
-
     assert Foo().tag == 'form'
 
 
@@ -96,3 +107,17 @@ def test_new_phtml_attr_merge():
         attrs = {'method': 'POST'}
 
     assert Foo().attrs == {'class': 'foo', 'method': 'POST'}
+    assert str(Foo()) == '<form method="POST" class="foo"></form>'
+
+
+def test_new_phtml_attr_override():
+    class Foo(Div):
+        phtml = '<form></form>'
+        attrs = {'method': 'POST'}
+    assert Foo({'method': 'GET'}).attrs == {'method': 'GET'}
+
+
+def test_new_phtml_children():
+    class Foo(Div):
+        phtml = '<form></form>'
+    assert str(Foo('bar')) == '<form>bar</form>'
