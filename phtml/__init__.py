@@ -1,7 +1,7 @@
 import copy
 
 
-class Node:
+class Component:
     def __new__(cls, *args):
         self = object.__new__(cls)
         self.tag = copy.copy(getattr(cls, 'tag'))
@@ -45,7 +45,7 @@ class Node:
         elif isinstance(key, int):
             return self.children[key]
         else:
-            raise Exception('Node __getitem__ only accepts int or str')
+            raise Exception('Component __getitem__ only accepts int or str')
 
     def __setitem__(self, key, value):
         if isinstance(key, str):
@@ -53,7 +53,7 @@ class Node:
         elif isinstance(key, int):
             self.children[key] = value
         else:
-            raise Exception('Node __setitem__ only accepts int or str key')
+            raise Exception('Component __setitem__ only accepts int or str key')
 
     def append(self, value):
         self.children.append(value)
@@ -63,16 +63,16 @@ class Node:
         return Template(str(self)).render(**context)
 
 
-class Div(Node):
+class Div(Component):
     tag = 'div'
 
 
-class Form(Node):
+class Form(Component):
     tag = 'form'
     attrs = {'method': 'POST'}
 
 
-class Input(Node):
+class Input(Component):
     tag = 'input'
 
 
