@@ -1,4 +1,5 @@
 import copy
+from lxml import etree
 
 
 class Component:
@@ -6,10 +7,16 @@ class Component:
         self = object.__new__(cls)
         self.tag = copy.copy(getattr(cls, 'tag'))
         self.attrs = copy.copy(getattr(cls, 'attrs', {}))
+        self.phtml = copy.copy(getattr(cls, 'phtml', None))
+        self.children = copy.copy(getattr(cls, 'children', []))
         return self
 
     def __init__(self, *args, selfclose=None):
-        self.children = []
+        if self.phtml:
+            parsed = etree.fromstring(self.phtml)
+            self.tag = parsed.tag
+            self.attrs.update(parsed.attrib)
+
         for arg in args:
             if isinstance(arg, dict):
                 self.attrs.update(arg)
