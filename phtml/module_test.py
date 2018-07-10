@@ -75,3 +75,9 @@ def test_setitem_exception():
 
 def test_jinja():
     assert Div('{{ a }}').jinja(a=1) == '<div>1</div>'
+
+
+def test_new_attrs():
+    class Foo(Div):
+        attrs = {'class': 'foo'}
+    assert Foo()['class'] == 'foo'

@@ -1,21 +1,18 @@
+import copy
 
 
 class Node:
     def __new__(cls, *args):
         self = object.__new__(cls)
-        self.tag = getattr(cls, 'tag')
-
-        for name, value in getattr(cls, 'default_attrs', {}).items():
-            self.attrs[name] = value
-
+        self.tag = copy.copy(getattr(cls, 'tag'))
+        self.attrs = copy.copy(getattr(cls, 'attrs', {}))
         return self
 
     def __init__(self, *args, selfclose=None):
-        self.attrs = dict()
-        self.children = list()
+        self.children = []
         for arg in args:
             if isinstance(arg, dict):
-                self.attrs = arg
+                self.attrs.update(arg)
             else:
                 self.children.append(arg)
 
@@ -72,7 +69,7 @@ class Div(Node):
 
 class Form(Node):
     tag = 'form'
-    default_attrs = {'method': 'POST'}
+    attrs = {'method': 'POST'}
 
 
 class Input(Node):
@@ -80,4 +77,4 @@ class Input(Node):
 
 
 class Submit(Input):
-    default_attrs = {'type': 'submit'}
+    attrs = {'type': 'submit'}
