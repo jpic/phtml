@@ -18,10 +18,8 @@ The base component class is Node:
             'class': 'foo',         # node.attrs['class']
             'method': 'POST',       # node.attrs['method']
         },
-        [                           # node.children
-            '{{ form.as_p() }}',    # node.children[0]
-            Node('input', {'type': 'submit'}, selfclose=True),
-        ],
+        '{{ form.as_p() }}',    # node.children[0]
+        Node('input', {'type': 'submit'}, selfclose=True),
     )
 
 Casting form_layout to string will return the following:
@@ -79,7 +77,8 @@ Importing on the fly
 
     form_layout = Node.factory(
         'phtml.Form', {'class': 'foo'},
-        ['{{ form.as_p() }}', Node('phtml.Submit')],
+        '{{ form.as_p() }}',
+        Node('phtml.Submit'),
     )
 
 Jinja and Materialize for the poor
@@ -94,10 +93,10 @@ probably die because of a side effect in an alternate reality or something:
     from phtml import Form, Div
 
     your_layout = Form(
-        Div({'class': 'row'}, [
-            Div({'class': 'col m6 s12'}, ['{{ form["username"] }}']),
-            Div({'class': 'col m6 s12'}, ['{{ form["password"] }}']),
-        ]),
+        Div({'class': 'row'},
+            Div({'class': 'col m6 s12'}, '{{ form["username"] }}'),
+            Div({'class': 'col m6 s12'}, '{{ form["password"] }}'),
+        ),
     )
 
 Refactored components for the rich

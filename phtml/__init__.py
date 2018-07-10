@@ -16,8 +16,8 @@ class Node:
         for arg in args:
             if isinstance(arg, dict):
                 self.attrs = arg
-            if isinstance(arg, list):
-                self.children = arg
+            else:
+                self.children.append(arg)
 
         self.selfclose = selfclose
 

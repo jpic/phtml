@@ -20,7 +20,7 @@ def test_init_attr():
 
 
 def test_init_children():
-    assert Div(['foo']).children == ['foo']
+    assert Div('foo').children == ['foo']
 
 
 def test_str_default():
@@ -28,11 +28,11 @@ def test_str_default():
 
 
 def test_str_child():
-    assert str(Div(['foo'])) == '<div>foo</div>'
+    assert str(Div('foo')) == '<div>foo</div>'
 
 
 def test_str_children():
-    assert str(Div(['foo', Div()])) == '<div>foo<div></div></div>'
+    assert str(Div('foo', Div())) == '<div>foo<div></div></div>'
 
 
 def test_str_attr():
@@ -40,7 +40,7 @@ def test_str_attr():
 
 
 def test_str_attr_child():
-    assert str(Div({'class': 'a'}, ['b'])) == '<div class="a">b</div>'
+    assert str(Div({'class': 'a'}, 'b')) == '<div class="a">b</div>'
 
 
 def test_getitem_attr():
@@ -48,7 +48,7 @@ def test_getitem_attr():
 
 
 def test_getitem_child():
-    assert Div(['a'])[0] == 'a'
+    assert Div('a')[0] == 'a'
 
 
 def test_getitem_exception():
@@ -74,4 +74,4 @@ def test_setitem_exception():
 
 
 def test_jinja():
-    assert Div(['{{ a }}']).jinja(a=1) == '<div>1</div>'
+    assert Div('{{ a }}').jinja(a=1) == '<div>1</div>'
