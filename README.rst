@@ -6,20 +6,20 @@ phtml is a silly python library to generate HTML in Python like you would with a
 Component base
 ==============
 
-The base component class is Node:
+You have an Element class you can import as E:
 
 .. code-block:: python
 
-    from phtml import Node
+    from phtml import E
 
-    form_layout = Node(
-        'form',                     # node.tag
-        {                           # node.attrs
-            'class': 'foo',         # node.attrs['class']
-            'method': 'POST',       # node.attrs['method']
+    form_layout = E(
+        'form',                     # e.tag
+        {                           # e.attrs
+            'class': 'foo',         # e.attrs['class']
+            'method': 'POST',       # e.attrs['method']
         },
-        '{{ form.as_p() }}',    # node.children[0]
-        Node('input', {'type': 'submit'}, selfclose=True),
+        '{{ form.as_p() }}',        # e.children[0]
+        E('input', {'type': 'submit'}),
     )
 
 Casting form_layout to string will return the following:
@@ -30,6 +30,32 @@ Casting form_layout to string will return the following:
         {{ form.as_p() }}
         <input type="submit" />
     </form>
+
+Rendering with jinja:
+
+.. code-block:: python
+
+    form_layout.jinja(form=YourForm)
+
+You can import the Component class as C:
+
+.. code-block:: python
+
+    class CheckboxField(Comoponent):
+        phtml = '''
+        <div class="mdc-form-field">
+            <div class="mdc-checkbox">
+                <input
+                    type="checkbox"
+                    id="{{ field.id }}"
+                    class="mdc-checkbox__native-control"
+                    name="{{ field.name }}"
+                />
+              <div class="mdc-checkbox__background"></div>
+            </div>
+            <label for="{{ id }}">{{ label }}</label>
+        </div>
+        '''
 
 React style
 ===========

@@ -2,6 +2,12 @@ import copy
 from lxml import etree
 
 
+class JinjaRenderer:
+    def render(self, template, context):
+        from jinja2 import Template
+        return Template(template).render(**context)
+
+
 class Component:
     def __new__(cls, *args):
         self = object.__new__(cls)
@@ -9,9 +15,10 @@ class Component:
         self.attrs = copy.copy(getattr(cls, 'attrs', {}))
         self.phtml = copy.copy(getattr(cls, 'phtml', None))
         self.children = copy.copy(getattr(cls, 'children', []))
+        self.renderer = getattr(cls, 'renderer', JinjaRenderer())
         return self
 
-    def __init__(self, *args, selfclose=None):
+    def __init__(self, *args, selfclose=None, **kwargs):
         if self.phtml:
             parsed = etree.fromstring(self.phtml)
             self.tag = parsed.tag
@@ -23,18 +30,15 @@ class Component:
             else:
                 self.children.append(arg)
 
+        for key, value in kwargs.items():
+            setattr(self, key, value)
+
         self.selfclose = selfclose
 
     def __str__(self):
         html = ['<', self.tag]
         for key, value in self.attrs.items():
-            html += [
-                ' ',
-                key.replace('_', '-'),
-                '="',
-                value,
-                '"',
-            ]
+            html += [' ', key, '="', value, '"']
 
         if self.selfclose:
             html.append(' />')
@@ -64,10 +68,6 @@ class Component:
 
     def append(self, value):
         self.children.append(value)
-
-    def jinja(self, **context):
-        from jinja2 import Template
-        return Template(str(self)).render(**context)
 
 
 class Div(Component):

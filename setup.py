@@ -31,7 +31,7 @@ setup(
     ),
     entry_points={
         'console_scripts': [
-            'phtml-django = phtml.django.example:manage',
+            'phtml-django = phtml.django.example.manage:main',
         ],
     },
     classifiers=[
